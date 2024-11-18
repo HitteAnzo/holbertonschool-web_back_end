@@ -1,5 +1,4 @@
 /*eslint-disable*/
-
 function getListStudentIds(students) {
     if (!Array.isArray(students)) {
         return [];
