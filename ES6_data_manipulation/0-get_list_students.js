@@ -1,6 +1,5 @@
-/*eslint-disable*/
-
-function getListStudents() {
+/* eslint-disable */
+export default function getListStudents() {
     return [
         { id: 1, firstName: 'Guillaume', location: 'San Francisco' },
         { id: 2, firstName: 'James', location: 'Columbia' },
