@@ -1,1 +1,2 @@
-use my_bd
+// insert a document
+use my_db
