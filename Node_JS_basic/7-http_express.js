@@ -1,24 +1,21 @@
-const express = require('express');
-const fs = require('fs');
+import express from 'express';
+import fs from 'fs';
 const app = express();
-const port = 1245;
 
 const databaseFilePath = process.argv[2];
 
-app.use((req, res, next) => {
+app.use((_, res, next) => {
   res.setHeader('Content-Type', 'text/plain');
   next();
 });
 
-// Route for the root path
-app.get('/', (req, res) => {
+app.get('/', (_, res) => {
   res.send('Hello Holberton School!');
 });
 
-// Route for the /students path
-app.get('/students', (req, res) => {
+app.get('/students', (_, res) => {
   if (!databaseFilePath) {
-    res.status(500).send('Database file path not provided');
+    res.status(500).send('Database file path is missing');
     return;
   }
 
@@ -48,14 +45,13 @@ app.get('/students', (req, res) => {
     const csList = students.cs.join(', ');
     const sweList = students.swe.join(', ');
 
-    res.send(`This is the list of our students\nNumber of students: ${students.total}\nNumber of students in CS: ${students.cs.length}. List: ${csList}\nNumber of students in SWE: ${students.swe.length}. List: ${sweList}`);
+    res.send(`This is the list of our students\n` +
+             `Number of students: ${students.total}\n` +
+             `Number of students in CS: ${students.cs.length}. List: ${csList}\n` +
+             `Number of students in SWE: ${students.swe.length}. List: ${sweList}`);
   });
 });
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is listening on port ${port}`);
-});
+app.listen(1245);
 
-// Export the app
 module.exports = app;
