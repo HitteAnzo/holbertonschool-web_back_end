@@ -1,7 +1,7 @@
 const express = require('express');
 const fs = require('fs');
-const path = require('path');
 const app = express();
+const port = 1245;
 
 const databaseFilePath = process.argv[2];
 
@@ -10,13 +10,15 @@ app.use((req, res, next) => {
   next();
 });
 
+// Route for the root path
 app.get('/', (req, res) => {
   res.send('Hello Holberton School!');
 });
 
+// Route for the /students path
 app.get('/students', (req, res) => {
   if (!databaseFilePath) {
-    res.status(500).send('Database file path is missing');
+    res.status(500).send('Database file path not provided');
     return;
   }
 
@@ -46,13 +48,14 @@ app.get('/students', (req, res) => {
     const csList = students.cs.join(', ');
     const sweList = students.swe.join(', ');
 
-    res.send(`This is the list of our students\n` +
-             `Number of students: ${students.total}\n` +
-             `Number of students in CS: ${students.cs.length}. List: ${csList}\n` +
-             `Number of students in SWE: ${students.swe.length}. List: ${sweList}`);
+    res.send(`This is the list of our students\nNumber of students: ${students.total}\nNumber of students in CS: ${students.cs.length}. List: ${csList}\nNumber of students in SWE: ${students.swe.length}. List: ${sweList}`);
   });
 });
 
-app.listen(1245);
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is listening on port ${port}`);
+});
 
+// Export the app
 module.exports = app;
