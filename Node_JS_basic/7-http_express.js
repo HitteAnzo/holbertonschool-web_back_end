@@ -1,6 +1,6 @@
 const express = require('express');
 const fs = require('fs');
-const path = require('path');
+
 const app = express();
 
 const databaseFilePath = process.argv[2];
@@ -26,15 +26,15 @@ app.get('/students', (req, res) => {
       return;
     }
 
-    const lines = data.trim().split('\n').filter(line => line.trim() !== '');
+    const lines = data.trim().split('\n').filter((line) => line.trim() !== '');
     const students = {
       total: 0,
       cs: [],
       swe: [],
     };
 
-    lines.forEach(line => {
-      const [name, course] = line.split(',').map(s => s.trim());
+    lines.forEach((line) => {
+      const [name, course] = line.split(',').map((s) => s.trim());
       if (course === 'CS') {
         students.cs.push(name);
       } else if (course === 'SWE') {
@@ -46,10 +46,10 @@ app.get('/students', (req, res) => {
     const csList = students.cs.join(', ');
     const sweList = students.swe.join(', ');
 
-    res.send(`This is the list of our students\n` +
-             `Number of students: ${students.total}\n` +
-             `Number of students in CS: ${students.cs.length}. List: ${csList}\n` +
-             `Number of students in SWE: ${students.swe.length}. List: ${sweList}`);
+    res.send('This is the list of our students\n'
+             + `Number of students: ${students.total}\n`
+             + `Number of students in CS: ${students.cs.length}. List: ${csList}\n`
+             + `Number of students in SWE: ${students.swe.length}. List: ${sweList}`);
   });
 });
 
