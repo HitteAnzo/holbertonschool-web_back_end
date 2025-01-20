@@ -1,18 +1,12 @@
-/**
- * This program prompts the user for their name and displays a greeting.
- * It also displays a closing message when the program ends.
- */
+const std = require('process');
 
-// Prompt the user for their name
-process.stdout.write('Welcome to Holberton School, what is your name?\n');
-
-process.stdin.on('data', (data) => {
-  const name = data.toString().trim();
-  process.stdout.write(`Your name is: ${name}`);
-  process.exit();
+std.stdout.write('Welcome to Holberton School, what is your name?\n');
+std.stdin.on('readable', () => {
+  const name = std.stdin.read();
+  if (name) {
+    std.stdout.write(`Your name is: ${name}`);
+  }
 });
-
-process.on('end', () => {
-  process.stdout.write('This important software is now closing\n');
+std.stdin.on('end', () => {
+  console.log('This important software is now closing');
 });
-
