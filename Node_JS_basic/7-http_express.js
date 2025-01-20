@@ -1,58 +1,29 @@
 const express = require('express');
-const fs = require('fs');
+
+const args = process.argv.slice(2);
+const countStudents = require('./3-read_file_async');
+
+const DATABASE = args[0];
 
 const app = express();
-
-const databaseFilePath = process.argv[2];
-
-app.use((req, res, next) => {
-  res.setHeader('Content-Type', 'text/plain');
-  next();
-});
+const port = 1245;
 
 app.get('/', (req, res) => {
   res.send('Hello Holberton School!');
 });
 
-app.get('/students', (req, res) => {
-  if (!databaseFilePath) {
-    res.status(500).send('Database file path is missing');
-    return;
+app.get('/students', async (req, res) => {
+  const msg = 'This is the list of our students\n';
+  try {
+    const students = await countStudents(DATABASE);
+    res.send(`${msg}${students.join('\n')}`);
+  } catch (error) {
+    res.send(`${msg}${error.message}`);
   }
-
-  fs.readFile(databaseFilePath, 'utf8', (err, data) => {
-    if (err) {
-      res.status(500).send('Unable to read the file');
-      return;
-    }
-
-    const lines = data.trim().split('\n').filter((line) => line.trim() !== '');
-    const students = {
-      total: 0,
-      cs: [],
-      swe: [],
-    };
-
-    lines.forEach((line) => {
-      const [name, course] = line.split(',').map((s) => s.trim());
-      if (course === 'CS') {
-        students.cs.push(name);
-      } else if (course === 'SWE') {
-        students.swe.push(name);
-      }
-      students.total += 1;
-    });
-
-    const csList = students.cs.join(', ');
-    const sweList = students.swe.join(', ');
-
-    res.send('This is the list of our students\n'
-             + `Number of students: ${students.total}\n`
-             + `Number of students in CS: ${students.cs.length}. List: ${csList}\n`
-             + `Number of students in SWE: ${students.swe.length}. List: ${sweList}`);
-  });
 });
 
-app.listen(1245);
+app.listen(port, () => {
+  //   console.log(`Example app listening at http://localhost:${port}`);
+});
 
 module.exports = app;
