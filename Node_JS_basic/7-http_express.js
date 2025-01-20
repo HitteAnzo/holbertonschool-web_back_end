@@ -1,19 +1,20 @@
-import express from 'express';
-import fs from 'fs';
+const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const app = express();
 
 const databaseFilePath = process.argv[2];
 
-app.use((_, res, next) => {
+app.use((req, res, next) => {
   res.setHeader('Content-Type', 'text/plain');
   next();
 });
 
-app.get('/', (_, res) => {
+app.get('/', (req, res) => {
   res.send('Hello Holberton School!');
 });
 
-app.get('/students', (_, res) => {
+app.get('/students', (req, res) => {
   if (!databaseFilePath) {
     res.status(500).send('Database file path is missing');
     return;
